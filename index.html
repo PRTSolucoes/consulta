@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Consultar Ticket</title>
+  <title>Painel - PRT Soluções</title>
 
   <style>
     body {
       font-family: Arial;
-      background: #f4f4f4;
+      background: #f4f6fb;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -18,34 +18,37 @@
     .box {
       background: white;
       padding: 30px;
-      width: 320px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      width: 350px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.15);
       text-align: center;
     }
 
     h2 {
       margin-top: 0;
+      margin-bottom: 20px;
     }
 
     input {
       width: 100%;
       padding: 12px;
-      margin-top: 15px;
+      margin-top: 10px;
       box-sizing: border-box;
       font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
     }
 
     button {
       width: 100%;
       padding: 12px;
-      margin-top: 10px;
+      margin-top: 15px;
       background: #2f5be7;
       color: white;
       border: none;
       cursor: pointer;
       font-size: 16px;
-      border-radius: 5px;
+      border-radius: 6px;
     }
 
     button:hover {
@@ -53,8 +56,26 @@
     }
 
     #resultado {
-      margin-top: 15px;
+      margin-top: 20px;
       font-weight: bold;
+      padding: 10px;
+      border-radius: 6px;
+      display: none;
+    }
+
+    .sucesso {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .erro {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .loading {
+      background: #fff3cd;
+      color: #856404;
     }
   </style>
 </head>
@@ -62,29 +83,37 @@
 <body>
 
 <div class="box">
-  <h2>Consultar Ticket</h2>
+  <h2>Enviar Email</h2>
+
   <input 
     type="number" 
     id="numero" 
     placeholder="Digite o número do Ticket"
     onkeypress="if(event.key === 'Enter') enviar()"
   >
-  <button onclick="enviar()">Consultar</button>
-  <p id="resultado"></p>
+
+  <button onclick="enviar()">Enviar</button>
+
+  <div id="resultado"></div>
 </div>
 
 <script>
 function enviar() {
   var numero = document.getElementById("numero").value;
+  var resultado = document.getElementById("resultado");
 
   if (!numero) {
-    document.getElementById("resultado").innerText = "Digite um número.";
+    resultado.style.display = "block";
+    resultado.className = "erro";
+    resultado.innerText = "Digite um número.";
     return;
   }
 
-  document.getElementById("resultado").innerText = "Consultando...";
+  resultado.style.display = "block";
+  resultado.className = "loading";
+  resultado.innerText = "Enviando email...";
 
-  fetch("https://prtsolucoes.app.n8n.cloud/webhook/consulta", {
+  fetch("https://SEU-N8N/webhook/consulta", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -95,10 +124,17 @@ function enviar() {
   })
   .then(response => response.json())
   .then(data => {
-    document.getElementById("resultado").innerText = data.resultado;
+    if (data.status === "sucesso") {
+      resultado.className = "sucesso";
+      resultado.innerText = data.mensagem;
+    } else {
+      resultado.className = "erro";
+      resultado.innerText = data.mensagem || "Erro ao enviar.";
+    }
   })
   .catch(error => {
-    document.getElementById("resultado").innerText = "Erro ao consultar.";
+    resultado.className = "erro";
+    resultado.innerText = "Erro de conexão com o servidor.";
   });
 }
 </script>
