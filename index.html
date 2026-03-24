@@ -2,43 +2,73 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Consulta</title>
+  <title>Consultar Ticket</title>
+
   <style>
     body {
       font-family: Arial;
       background: #f4f4f4;
-      text-align: center;
-      margin-top: 100px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
     }
+
     .box {
       background: white;
       padding: 30px;
-      width: 300px;
-      margin: auto;
+      width: 320px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      text-align: center;
     }
+
+    h2 {
+      margin-top: 0;
+    }
+
     input {
       width: 100%;
-      padding: 10px;
-      margin-top: 10px;
+      padding: 12px;
+      margin-top: 15px;
+      box-sizing: border-box;
+      font-size: 16px;
     }
+
     button {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin-top: 10px;
-      background: #007bff;
+      background: #2f5be7;
       color: white;
       border: none;
       cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background: #1d44c7;
+    }
+
+    #resultado {
+      margin-top: 15px;
+      font-weight: bold;
     }
   </style>
 </head>
+
 <body>
 
 <div class="box">
   <h2>Consultar Ticket</h2>
-  <input type="text" id="numero" placeholder="Digite o número do Ticket">
+  <input 
+    type="number" 
+    id="numero" 
+    placeholder="Digite o número do Ticket"
+    onkeypress="if(event.key === 'Enter') enviar()"
+  >
   <button onclick="enviar()">Consultar</button>
   <p id="resultado"></p>
 </div>
@@ -47,7 +77,14 @@
 function enviar() {
   var numero = document.getElementById("numero").value;
 
-  fetch("https://SEU-N8N/webhook/consulta", {
+  if (!numero) {
+    document.getElementById("resultado").innerText = "Digite um número.";
+    return;
+  }
+
+  document.getElementById("resultado").innerText = "Consultando...";
+
+  fetch("https://prtsolucoes.app.n8n.cloud/webhook/consulta", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -59,6 +96,9 @@ function enviar() {
   .then(response => response.json())
   .then(data => {
     document.getElementById("resultado").innerText = data.resultado;
+  })
+  .catch(error => {
+    document.getElementById("resultado").innerText = "Erro ao consultar.";
   });
 }
 </script>
