@@ -20,6 +20,35 @@
       min-height: 100vh;
     }
 
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .instrucoes {
+      background: #fff8e1;
+      border-left: 4px solid #ffb300;
+      padding: 15px;
+      width: 350px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.08);
+      margin-bottom: 15px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .instrucoes h3 {
+      margin: 0 0 10px 0;
+      font-size: 16px;
+    }
+
+    .instrucoes ul {
+      margin: 0;
+      padding-left: 18px;
+      text-align: left;
+    }
+
     .box {
       background: white;
       padding: 30px;
@@ -27,6 +56,7 @@
       border-radius: 12px;
       box-shadow: 0 0 15px rgba(0,0,0,0.15);
       text-align: center;
+      box-sizing: border-box;
     }
 
     input {
@@ -39,7 +69,7 @@
       box-sizing: border-box;
     }
 
-    /* REMOVE AS SETINHAS DO INPUT NUMBER */
+    /* Remove as setinhas do input number */
     input[type=number]::-webkit-inner-spin-button,
     input[type=number]::-webkit-outer-spin-button {
       -webkit-appearance: none;
@@ -93,19 +123,32 @@
 
 <body>
 
-<div class="box">
-  <h2>Enviar Email</h2>
+<div class="container">
 
-  <input 
-    type="number" 
-    id="numero" 
-    placeholder="Digite o número do Ticket"
-    onkeypress="if(event.key === 'Enter') enviar()"
-  >
+  <div class="instrucoes">
+    <h3>⚠️ Antes de enviar</h3>
+    <ul>
+      <li>Verifique se o Status está em <strong>CheckOut</strong>.</li>
+      <li>Verifique se a equipe <strong>Remoto</strong> está selecionada.</li>
+      <li>Verifique se o campo <strong>Contato</strong> ou <strong>Email</strong> está preenchido.</li>
+    </ul>
+  </div>
 
-  <button onclick="enviar()">Enviar</button>
+  <div class="box">
+    <h2>Enviar Email (Ticket Remoto)</h2>
 
-  <div id="resultado"></div>
+    <input 
+      type="number" 
+      id="numero" 
+      placeholder="Digite o número do Ticket"
+      onkeypress="if(event.key === 'Enter') enviar()"
+    >
+
+    <button onclick="enviar()">Enviar</button>
+
+    <div id="resultado"></div>
+  </div>
+
 </div>
 
 <script>
